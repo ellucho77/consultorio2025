@@ -1,12 +1,15 @@
 const form = document.getElementById("formTurno");
 const listaTurnos = document.getElementById("listaTurnos");
+const historialTurnos = document.getElementById("historialTurnos");
 const borrarTodo = document.getElementById("borrarTodo");
 const contenedorServicios = document.getElementById("servicios");
 
+// Cargar desde localStorage
 let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+let historial = JSON.parse(localStorage.getItem("historial")) || [];
 let servicioSeleccionado = null;
 
-// 📸 Lista de servicios con imágenes locales
+// === Lista de servicios ===
 const servicios = [
   { nombre: "Depilación láser", img: "img/images.jpg" },
   { nombre: "Limpieza facial profunda, Dermaplaning", img: "img/limpieza-facial-profunda.jpg" },
@@ -17,7 +20,7 @@ const servicios = [
   { nombre: "Plasma rico en plaquetas (Rostro, cuello, escote, manos)", img: "img/Plasma rico en plaquetas(Rostro,cuello,escote,manos).jpg" }
 ];
 
-// Crear cards dinámicamente
+// === Crear las cards de servicios ===
 servicios.forEach(serv => {
   const col = document.createElement("div");
   col.className = "col";
@@ -42,9 +45,11 @@ servicios.forEach(serv => {
   contenedorServicios.appendChild(col);
 });
 
+// Mostrar los turnos activos e historial
 mostrarTurnos();
+mostrarHistorial();
 
-// Guardar turno
+// === Guardar nuevo turno ===
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -57,8 +62,9 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  const existe = turnos.some((t) => t.fecha === fecha && t.hora === hora);
-  if (existe) {
+  // Verificar duplicado solo entre los turnos activos
+  const existeActivo = turnos.some((t) => t.fecha === fecha && t.hora === hora);
+  if (existeActivo) {
     alert("⚠️ Ya existe un turno registrado para esa fecha y hora.");
     return;
   }
@@ -72,21 +78,21 @@ form.addEventListener("submit", (e) => {
   };
 
   turnos.push(turno);
-  guardarTurnos();
+  guardarDatos();
   mostrarTurnos();
-  form.reset();
 
+  form.reset();
   document.querySelectorAll(".servicio-card").forEach(c => c.classList.remove("active"));
   servicioSeleccionado = null;
 });
 
-// Mostrar turnos
+// === Mostrar turnos activos ===
 function mostrarTurnos() {
   listaTurnos.innerHTML = "";
 
   if (turnos.length === 0) {
     listaTurnos.innerHTML =
-      '<li class="list-group-item text-center text-muted">No hay turnos registrados</li>';
+      '<li class="list-group-item text-center text-muted">No hay turnos activos</li>';
     return;
   }
 
@@ -94,22 +100,38 @@ function mostrarTurnos() {
 
   turnos.forEach((t) => {
     const li = document.createElement("li");
-    li.className =
-      "list-group-item d-flex justify-content-between align-items-center";
+    li.className = "list-group-item d-flex justify-content-between align-items-center flex-wrap";
+
     li.innerHTML = `
       <div>
-        <strong>${t.nombre}</strong> 
-        <div class="text-muted">${t.fecha} - ${t.hora}</div>
+        <strong>${t.nombre}</strong>
+        <div class="text-muted small">${t.fecha} - ${t.hora}</div>
         <span class="badge bg-info text-dark mt-2">${t.servicio}</span>
       </div>
-      <button class="btn btn-sm btn-outline-danger">🗑️</button>
+      <div class="btn-group mt-2 mt-md-0" role="group">
+        <button class="btn btn-sm btn-outline-success">Finalizar</button>
+        <button class="btn btn-sm btn-outline-danger">🗑️</button>
+      </div>
     `;
 
-    li.querySelector("button").addEventListener("click", () => {
+    // Eliminar turno activo
+    li.querySelector(".btn-outline-danger").addEventListener("click", () => {
       if (confirm("¿Eliminar este turno?")) {
         turnos = turnos.filter((turno) => turno.id !== t.id);
-        guardarTurnos();
+        guardarDatos();
         mostrarTurnos();
+      }
+    });
+
+    // Finalizar turno (mueve al historial)
+    li.querySelector(".btn-outline-success").addEventListener("click", () => {
+      if (confirm("¿Marcar este turno como finalizado?")) {
+        const finalizado = { ...t, finalizadoEn: new Date().toLocaleString() };
+        historial.push(finalizado);
+        turnos = turnos.filter((turno) => turno.id !== t.id);
+        guardarDatos();
+        mostrarTurnos();
+        mostrarHistorial();
       }
     });
 
@@ -117,14 +139,47 @@ function mostrarTurnos() {
   });
 }
 
-function guardarTurnos() {
-  localStorage.setItem("turnos", JSON.stringify(turnos));
+// === Mostrar historial ===
+function mostrarHistorial() {
+  historialTurnos.innerHTML = "";
+
+  if (historial.length === 0) {
+    historialTurnos.innerHTML =
+      '<li class="list-group-item text-center text-muted">Aún no hay turnos finalizados</li>';
+    return;
+  }
+
+  historial
+    .sort((a, b) => (b.finalizadoEn || "").localeCompare(a.finalizadoEn || ""))
+    .forEach((t) => {
+      const li = document.createElement("li");
+      li.className =
+        "list-group-item finalizado d-flex justify-content-between align-items-center flex-wrap";
+
+      li.innerHTML = `
+        <div>
+          <strong class="text-muted">${t.nombre}</strong>
+          <div class="text-muted small">${t.fecha} - ${t.hora}</div>
+          <span class="badge bg-light text-dark mt-2">${t.servicio}</span>
+          <span class="badge bg-success ms-2">Finalizado ✅</span>
+        </div>
+      `;
+
+      historialTurnos.appendChild(li);
+    });
 }
 
+// === Guardar en localStorage ===
+function guardarDatos() {
+  localStorage.setItem("turnos", JSON.stringify(turnos));
+  localStorage.setItem("historial", JSON.stringify(historial));
+}
+
+// === Borrar todos los turnos activos ===
 borrarTodo.addEventListener("click", () => {
-  if (confirm("¿Seguro que querés eliminar todos los turnos?")) {
+  if (confirm("¿Seguro que querés eliminar todos los turnos activos?")) {
     turnos = [];
-    guardarTurnos();
+    guardarDatos();
     mostrarTurnos();
   }
 });
