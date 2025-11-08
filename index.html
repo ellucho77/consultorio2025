@@ -13,7 +13,11 @@
 
   <body class="bg-light">
     <div class="container py-5">
-      <h1 class="text-center mb-4">🩺 Sistema de Turnos del Consultorio</h1>
+    <h1 class="titulo-consultorio text-center mb-4">
+  <img src="img/logo3.jpeg" alt="Logo Consultorio" class="logo-consultorio" />
+ 
+</h1>
+
 
       <!-- Formulario -->
       <div class="card shadow p-4 mb-5">
@@ -76,8 +80,70 @@
           Borrar todos los turnos
         </button>
       </div>
+
+      <!-- Botón del historial -->
+      <div class="text-center mt-5">
+        <button
+          class="btn btn-outline-primary px-4"
+          data-bs-toggle="modal"
+          data-bs-target="#modalHistorial"
+        >
+          📅 Ver historial de turnos finalizados
+        </button>
+      </div>
     </div>
 
+    <!-- Modal del historial -->
+    <div
+      class="modal fade"
+      id="modalHistorial"
+      tabindex="-1"
+      aria-labelledby="modalHistorialLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+          <div class="modal-header bg-primary text-white rounded-top-4">
+            <h5 class="modal-title" id="modalHistorialLabel">
+              Historial de turnos finalizados
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Filtro por fecha -->
+            <div class="mb-3 text-center">
+              <label class="form-label fw-semibold">Filtrar por fecha</label>
+              <input
+                type="date"
+                id="filtroFecha"
+                class="form-control mx-auto"
+                style="max-width: 250px"
+              />
+            </div>
+
+            <!-- Lista de historial -->
+            <ul id="historialTurnos" class="list-group"></ul>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
