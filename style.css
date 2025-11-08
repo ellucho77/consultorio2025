@@ -1,0 +1,164 @@
+/* === Estilo general del sitio (2025 aesthetic) === */
+body {
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #fff9fb 0%, #fde7ee 100%);
+  color: #333;
+}
+
+/* Tarjetas principales */
+.card {
+  border-radius: 1.2rem;
+  background-color: #ffffff;
+  border: none;
+  box-shadow: 0 8px 20px rgba(224, 107, 146, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(224, 107, 146, 0.15);
+}
+
+/* Encabezados */
+h1, h2, h4 {
+  color: #e06b92;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+label.form-label {
+  color: #b84b73;
+  font-weight: 500;
+}
+
+/* === Inputs y selects modernos === */
+.form-control,
+.form-select {
+  border: 1px solid #f3c7d8;
+  border-radius: 10px;
+  background-color: #fff9fb;
+  transition: all 0.3s ease;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #e06b92;
+  box-shadow: 0 0 0 0.25rem rgba(224, 107, 146, 0.25);
+}
+
+/* Botón principal */
+.btn-primary {
+  background: linear-gradient(135deg, #e06b92, #f3a6c3);
+  border: none;
+  color: white;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 10px 25px;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #d94d7b, #f187a9);
+  box-shadow: 0 6px 15px rgba(224, 107, 146, 0.4);
+  transform: translateY(-2px);
+}
+
+/* === Cards de servicios === */
+.servicio-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 100%;
+  background-color: #fff9fb;
+  box-shadow: 0 4px 10px rgba(224, 107, 146, 0.1);
+}
+
+.servicio-card:hover {
+  transform: scale(1.05);
+  border-color: #e06b92;
+  box-shadow: 0 0 20px rgba(224, 107, 146, 0.25);
+}
+
+.servicio-card.active {
+  border-color: #e06b92;
+  background-color: #fde7ee;
+  box-shadow: 0 0 20px rgba(224, 107, 146, 0.35);
+}
+
+.servicio-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-bottom: 1px solid #f8cdda;
+}
+
+.servicio-card .card-body {
+  text-align: center;
+  padding: 1rem;
+}
+
+.servicio-card h6 {
+  font-weight: 600;
+  color: #e06b92;
+  font-size: 0.95rem;
+  word-wrap: break-word;
+}
+
+/* === Lista de turnos === */
+#listaTurnos li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 12px;
+  border-radius: 10px;
+  background-color: #fff9fb;
+  border: 1px solid #f7c7d6;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 6px rgba(224, 107, 146, 0.1);
+  margin-bottom: 8px;
+}
+
+#listaTurnos li strong {
+  color: #b84b73;
+}
+
+.badge {
+  background-color: #f3a6c3 !important;
+  color: white !important;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.btn-outline-danger {
+  border-radius: 10px;
+  border-color: #f3a6c3;
+  color: #e06b92;
+  transition: 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+  background-color: #e06b92;
+  color: white;
+  box-shadow: 0 4px 10px rgba(224, 107, 146, 0.3);
+}
+
+/* Botón borrar todos */
+#borrarTodo {
+  background: #fff;
+  border: 2px solid #f3a6c3;
+  color: #e06b92;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+#borrarTodo:hover {
+  background-color: #e06b92;
+  color: white;
+  box-shadow: 0 6px 15px rgba(224, 107, 146, 0.4);
+}
